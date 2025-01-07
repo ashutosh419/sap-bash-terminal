@@ -109,6 +109,15 @@ This repo will be a guide to various linux commands which can be helpful to use 
     }
     ```
 
+2. Reading JSON with spaces in the key
+
+    The key name has to be in double-quotes, and we use `--raw-output` or `-r` to remove any quotes in the output.
+    ```jq
+    > jq '.environmentInstances[0].labels | fromjson."API Endpoint"' env.json -r
+
+    https://api.cf.us10-001.hana.ondemand.com
+    ```
+
 ## BTP
 
 1. Enable Autocomplete in BTP - useful for performing any operation by pressing TAB.
