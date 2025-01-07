@@ -13,14 +13,19 @@ bind -x '"\C-l": clear'
 2. Setting command aliases for shorter commands
 
 The below code sets only the alias temporary. It needs to be set in ~/bash.rc file.
+
 ````bash
 alias r='ranger'
 ````
+
 We can use the ls command with -a OPTION to see the hidden files in Home (~) directory. (FunFact: Home and ~ is used to refer the same because it was the same key in Mainframe keyboard).
+
 ```bash
 ls -al ~/
-``` 
+```
+
 It would show all the files: 
+
 ```bash
 total 208
 drwxrwsr-x 1 codespace codespace  4096 Jan  3 09:18 .
@@ -31,15 +36,29 @@ drwxr-xr-x 1 root      root       4096 Dec 31 15:38 ..
 -rw-rw-r-- 1 codespace codespace  6086 Jan  2 13:11 .bashrc
 ... and so on
 ```
+
 Edit the file or create the file .bash_aliases which is referred in the .bashrc file. (modularisation)
 Use Vim or Nano or Code to do this.
+
 ```bash
 cd ~/
 code .bash_aliases
 ```
+
 And add the line `alias r='ranger'` to the file to make this alias permanent.
 
-3. 
+3. Using ranger for terminal based file explorer: 
+
+Use the `ranger` command to start the terminal based file browser which provides a splitscreen preview and easily navigate the directories. It provides immediate preview of the file in the splitscreen pane. We can use `Shift + S` to open the terminal in the current directory and open the ranger back using `Ctrl + D`.
+
+It can be installed using `apt-get` in Linux env.
+
+![alt text](assets/image.png)
+
+![alt text](assets/image-1.png)
+
+4. 
+
 ## Curl
 
 ## Jq
