@@ -74,3 +74,29 @@ btp enable autocomplete bash
 ## Cloud Foundry
 
 ## CDS (Node.js)
+
+## Node.js
+
+1. List all installed packages globally:
+
+```bash
+npm ls -g
+npm list --global
+```
+
+It would show all the installed packages in tree form.
+
+```bash
+/usr/local/share/nvm/versions/node/v20.18.1/lib
+├── @sap/cds-dk@8.6.1
+├── @sap/generator-base-mta-module@2.0.0
+├── @sap/generator-cap-project@1.8.2
+├── @sap/generator-fiori@1.16.1
+├── @sap/generator-hdb-project@1.14.0
+├── @sap/ux-ui5-tooling@1.16.0
+├── corepack@0.29.4
+├── generate-gitignore@0.2.6
+├── generate@0.14.0
+├── npm@10.8.2
+└── pnpm@9.15.0
+```
