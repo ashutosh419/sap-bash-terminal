@@ -177,6 +177,14 @@ This repo will be a guide to various linux commands which can be helpful to use 
 
 ## CDS (Node.js)
 
+1. Add Swagger UI to CAP Project
+
+    ```bash
+    npm add --save-dev cds-swagger-ui-express
+    ```
+
+    Example Page: [Swagger UI - Petstore](https://petstore.swagger.io/)
+
 ## Node.js
 
 1. List all installed packages globally:
