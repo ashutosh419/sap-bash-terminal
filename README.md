@@ -1,4 +1,4 @@
-# sap-bash-play
+# sap-bash-terminal
 
 This repo will be a guide to various linux commands which can be helpful to use the bash terminal in VSCode, BAS or any Linux env.
 
