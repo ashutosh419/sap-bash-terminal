@@ -78,13 +78,91 @@ This repo will be a guide to various linux commands which can be helpful to use 
 
 ## Jq
 
+1. `fromjson` function to read unescape json within json property
+
+   ```json
+    {
+        "environmentInstances": [
+            {
+                "id": "C803F6D3-ED1E-4E9D-BB75-81DACEFB6DA0",
+                "parameters": "{\"instance_name\":\"2ddfba9btrial\",\"archetype\":\"trial\",\"status\":\"ACTIVE\"}",
+                "labels": "{\"API Endpoint\":\"https://api.cf.us10-001.hana.ondemand.com\",\"Org Name\":\"2ddfba9btrial\",\"Org ID\":\"92f63e3d-bcb8-4131-b16f-c74af7d456c5\",\"Org Memory Limit\":\"4,096MB\"}",
+                "customLabels": {},
+            }
+        ]
+    }
+   ```
+
+    We can use `jq` function `fromjson` to unescape the labels, parameters properties.
+
+    ```jq
+    jq '.environmentInstances[0].labels | fromjson' env.json 
+    ```
+
+    It gives out the formatted JSON correctly as follows:
+    ```JSON
+    {
+        "API Endpoint": "https://api.cf.us10-001.hana.ondemand.com",
+        "Org Name": "2ddfba9btrial",
+        "Org ID": "92f63e3d-bcb8-4131-b16f-c74af7d456c5",
+        "Org Memory Limit": "4,096MB"
+    }
+    ```
+
 ## BTP
 
 1. Enable Autocomplete in BTP - useful for performing any operation by pressing TAB.
 
-````bash
-btp enable autocomplete bash
-````
+    ````bash
+    btp enable autocomplete bash
+    ````
+
+2. Get CF API Endpoint using BTP Cli:
+
+    ```bash
+    > btp --format json list accounts/environment-instance 
+
+    {
+    "environmentInstances": [
+        {
+        "id": "C803F6D3-ED1E-4E9D-BB75-81DACEFB6DA0",
+        "name": "2ddfba9btrial",
+        "brokerId": "985B006B-820E-40BF-AC53-AB3D2B86C294",
+        "globalAccountGUID": "9c49735e-6b4e-4689-844a-9a13460fec39",
+        "subaccountGUID": "459d0dd0-3b2d-4a74-a0a8-e540eacd17d8",
+        "tenantId": "459d0dd0-3b2d-4a74-a0a8-e540eacd17d8",
+        "serviceId": "fa31b750-375f-4268-bee1-604811a89fd9",
+        "planId": "267b5620-3011-4c48-8e56-8d103876275b",
+        "operation": "provision",
+        "parameters": "{\"instance_name\":\"2ddfba9btrial\",\"archetype\":\"trial\",\"status\":\"ACTIVE\"}",
+        "labels": "{\"API Endpoint\":\"https://api.cf.us10-001.hana.ondemand.com\",\"Org Name\":\"2ddfba9btrial\",\"Org ID\":\"92f63e3d-bcb8-4131-b16f-c74af7d456c5\",\"Org Memory Limit\":\"4,096MB\"}",
+        "customLabels": {},
+        "type": "Provision",
+        "status": "Processed",
+        "environmentType": "cloudfoundry",
+        "landscapeLabel": "cf-us10-001",
+        "platformId": "92f63e3d-bcb8-4131-b16f-c74af7d456c5",
+        "createdDate": "Oct 21, 2024, 6:17:14 AM",
+        "modifiedDate": "Oct 21, 2024, 6:17:33 AM",
+        "state": "OK",
+        "stateMessage": "Environment instance created.",
+        "serviceName": "cloudfoundry",
+        "planName": "trial"
+        }
+    ]
+    }
+ 
+    ```
+
+    We can format the same using Jq to display only the API Endpoint 
+
+    ```bash
+    > btp --format json list accounts/environment-instance | jq '.environmentInstances[0].labels | fromjson | ."API Endpoint"' --raw-output
+
+    https://api.cf.us10-001.hana.ondemand.com 
+    ```
+
+    Here we use Jq to navigate to the API Endpoint variable.  
 
 ## Cloud Foundry
 
