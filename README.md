@@ -66,7 +66,7 @@ This repo will be a guide to various linux commands which can be helpful to use 
     ```
     The below image shows text overflowing to the next lines:
 
-    ![alt text](assets/image2.png)
+    ![alt text](assets/image-2.png)
 
     It can be formatted easily using the command to show it aligned:
 
