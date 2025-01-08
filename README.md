@@ -185,6 +185,64 @@ This repo will be a guide to various linux commands which can be helpful to use 
 
     Example Page: [Swagger UI - Petstore](https://petstore.swagger.io/)
 
+2. Generate UUID in CDS
+
+    The below CDS utility function can be used to generate a random UUID using the crypto module of Node.Js. The same function is available in the utility file : `/node_modules/@sap/cds/lib/utils/cds-utils.js`
+
+    ```bash
+    > cds.utils.uuid() 
+
+    aec55e7e-b3f1-48ed-a044-76ec96d73ce6
+    ```
+
+3. CDS Repl for Interactive Execution
+
+    Using the `.run` command in CDS Repl, the CDS Runtime provides several variables in the global context to interact and play around the execution.
+
+    ```bash
+    > .run
+    [cds] - loaded model from 2 file(s):
+
+    srv/cat-service.cds
+    db/schema.cds
+
+    [cds] - connect to db > sqlite { url: ':memory:' }
+    > init from db/data/my.bookshop-Books_Authors.csv 
+    > init from db/data/my.bookshop-Books.csv 
+    > init from db/data/my.bookshop-Authors.csv 
+    /> successfully deployed to in-memory database. 
+
+    [cds] - using auth strategy {
+    kind: 'mocked',
+    impl: 'node_modules/@sap/cds/lib/srv/middlewares/auth/basic-auth'
+    } 
+
+    [cds] - using new OData adapter
+    [cds] - serving CatalogService { path: '/odata/v4/catalog' }
+
+    [cds] - server listening on { url: 'http://localhost:39215' }
+    [cds] - launched at 1/8/2025, 6:33:25 AM, version: 8.6.0, in: 630.756ms
+    [cds] - [ terminate with ^C ]
+
+
+    ------------------------------------------------------------------------
+    Following variables are made available in your repl's global context:
+
+    from cds.entities: {
+    Books,
+    Authors,
+    Books_Authors,
+    }
+
+    from cds.services: {
+    db,
+    CatalogService,
+    }
+
+    ```
+
+    We can use the REPL to query the objects using CQL and test the application.
+
 ## Node.js
 
 1. List all installed packages globally:
