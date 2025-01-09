@@ -283,7 +283,10 @@ It would show all the installed packages in tree form.
 
     https://ui5.sap.com/resources/sap/ui/comp/smarttable/SmartTable-dbg.js    (SmartTable Control)
 
-    
+    https://sapui5.hana.ondemand.com/1.131.1/resources/sap/fe/core/converters/ManifestSettings.ts  (Std. List Report Manifest Settings)
+
+    https://sapui5.hana.ondemand.com/1.131.1/resources/sap/fe/core/controllerextensions/EditFlow.ts   (List Report Template EditFlow)
+
     ```
 
 2. Display the non-minified version of the files
