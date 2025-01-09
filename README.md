@@ -278,6 +278,12 @@ It would show all the installed packages in tree form.
 
     ```
     https://github.com/SAP/openui5/
+
+    https://ui5.sap.com/resources/sap/ui/comp/odata/MetadataAnalyser-dbg.js   (Annotation Processing)
+
+    https://ui5.sap.com/resources/sap/ui/comp/smarttable/SmartTable-dbg.js    (SmartTable Control)
+
+    
     ```
 
 2. Display the non-minified version of the files
