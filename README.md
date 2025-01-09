@@ -268,3 +268,22 @@ It would show all the installed packages in tree form.
 ├── npm@10.8.2
 └── pnpm@9.15.0
 ```
+
+## Fiori / UI5
+
+1. Understanding the standard controls
+
+    To understand what's happening under the hood, it's useful to see the implementation of the standard controls like `sap.m.Text` for example. We can see them in console when the page is loaded, however it's a minified version (preload version). To see the complete implementation we use the openui5 git repo. 
+    Some of the files like `sap.ui.comp` is not available because its not open-source and can be checked only via the CDN and not GitRepo for Openui5.
+
+    ```
+    https://github.com/SAP/openui5/
+    ```
+
+2. Display the non-minified version of the files
+
+    As a developer, we don't like to work with the minified version of the controller files. They hide the crucial elements and make it difficult to understand the code behind the app. We can use the parameter `sap-ui-debug=true` in the URL to requst the `dbg` files which are the non-minified versions and makes it easy for the developer to debug, understand and troubleshoot any application.
+
+    ```
+    https://your-app-url?sap-ui-debug=true
+    ```
