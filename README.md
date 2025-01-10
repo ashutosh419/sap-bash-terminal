@@ -331,7 +331,7 @@ It would show all the installed packages in tree form.
     </Table>
     ```
 
-4. OData V4 Model: 
+4. OData V4 Model
 
     Below commands can be used to play around and dig through the Model in Chrome Developer Tools:
 
@@ -374,12 +374,30 @@ It would show all the installed packages in tree form.
     // Making OData Calls from Console in OData V4 Model. 
     await oModel.bindContext("/Books('2')").requestObject();
 
-
-    //ListBinding
+    // ListBinding
     oList = oModel.bindList("/Books")
+    /*
+    getContexts - Retrieves the visible rows or items in the table or list.
+    requestContexts - Asynchronously fetches all contexts for the bound entity set.
+    filter - Applies client-side or server-side filters to the binding. 
+    */
+    oBook1 = oList.getContexts(0,1)[0]
+    oBook1.setProperty('stock',200)
 
-    //ContextBining - https://sapui5.hana.ondemand.com/1.131.1/resources/sap/ui/model/odata/v4/ODataContextBinding-dbg.js
+    // ContextBining - https://sapui5.hana.ondemand.com/1.131.1/resources/sap/ui/model/odata/v4/ODataContextBinding-dbg.js
     oContextBinding = oMode.bindContext('/Books')
-    oContextBinding..getBoundContext().setProperty('stock',15) 
-    oContextBinding..getBoundContext().delete()
-    ```    
+    oContextBinding.getBoundContext().setProperty('stock',15) 
+    oContextBinding.getBoundContext().delete()
+    ```
+
+5. Expression Parsing in UI5
+
+    ```url
+    https://sapui5.hana.ondemand.com/1.131.1/resources/sap/ui/base/ExpressionParser-dbg.js
+    ```
+
+    This file shows how the parsing works for Binding expressions like below 
+
+    ```xml
+    <Text text="{parts: [{path: 'FirstName'}, {path: 'LastName'}], formatter: '.formatName'}" />
+    ```
