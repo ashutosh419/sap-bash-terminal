@@ -296,3 +296,79 @@ It would show all the installed packages in tree form.
     ```
     https://your-app-url?sap-ui-debug=true
     ```
+
+3. Types of Bindings
+
+    Property Binding: Binds a single property of a control (e.g., `value` of an `Input`).
+
+    ```xml
+    <Input value="{/Name}" />
+    ```
+
+    Element Binding: Binds an entire object to a control and its children.
+
+    ```xml
+    <Panel binding="{/Employee}">
+        <Text text="{Name}" />
+        <Text text="{Position}" />
+    </Panel>
+    ```
+
+    Aggregation Binding: Binds a collection of data to aggregation controls like Table, List, or ComboBox.
+
+    ```xml
+    <Table items="{/Employees}">
+        <columns>
+            <Column>
+                <Text text="Name" />
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem>
+                <Text text="{Name}" />
+            </ColumnListItem>
+        </items>
+    </Table>
+    ```
+
+4. OData V4 Model: 
+
+    Below commands can be used to play around and dig through the Model in Chrome Developer Tools:
+
+    ```Js
+    //List Report Example
+    oTable = sap.ui.getCore().byId("my.bookshop::BooksList--fe::table::Books::LineItem::Table")
+    oModel = oTable.getModel();
+    
+    //Reading the Metadata and Service Document
+    oData = oModel.getMetaModel().getData();
+    {
+        "$Version": "4.0",
+        "$Reference": {
+            ...
+        },
+        "CatalogService.": {
+            ...
+        },
+        "CatalogService.EntityContainer": {
+            "$kind": "EntityContainer",
+            "Books": {
+                ...
+            }
+        },
+        "$EntityContainer": "CatalogService.EntityContainer",
+        "CatalogService.Books": {
+            ...
+        },
+        "$Annotations": {
+            ...
+        }
+    }
+
+    // Fetching the Properties in an Entity
+    oBooks = oData[`CatalogService.Books`]
+    Object.keys(oBooks).filter( (key) => oBooks[`${key}`].$kind == 'Property' )
+
+    ["ID","title","stock"]
+     
+    ```    
