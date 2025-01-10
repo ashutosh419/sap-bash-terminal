@@ -371,4 +371,15 @@ It would show all the installed packages in tree form.
 
     ["ID","title","stock"]
      
+    // Making OData Calls from Console in OData V4 Model. 
+    await oModel.bindContext("/Books('2')").requestObject();
+
+
+    //ListBinding
+    oList = oModel.bindList("/Books")
+
+    //ContextBining - https://sapui5.hana.ondemand.com/1.131.1/resources/sap/ui/model/odata/v4/ODataContextBinding-dbg.js
+    oContextBinding = oMode.bindContext('/Books')
+    oContextBinding..getBoundContext().setProperty('stock',15) 
+    oContextBinding..getBoundContext().delete()
     ```    
