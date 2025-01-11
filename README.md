@@ -388,6 +388,16 @@ It would show all the installed packages in tree form.
     oContextBinding = oMode.bindContext('/Books')
     oContextBinding.getBoundContext().setProperty('stock',15) 
     oContextBinding.getBoundContext().delete()
+
+    // Accessing the Table Rows 
+    oRowBinding = oTable.getRowBinding()  // This gives ODataListBinding which can be  used with getContexts to access each row
+    oContext = oRowBinding.getContexts().[0]
+    oContext.setSelectec(true)
+    
+
+    // Back and Reload using
+    window.history.back()
+    window.location.reload()
     ```
 
 5. Expression Parsing in UI5
