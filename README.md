@@ -287,6 +287,7 @@ It would show all the installed packages in tree form.
 
     https://sapui5.hana.ondemand.com/1.131.1/resources/sap/fe/core/controllerextensions/EditFlow.ts   (List Report Template EditFlow)
 
+    https://sapui5.hana.ondemand.com/1.131.1/resources/sap/fe/templates/ListReport/ListReportController.controller.ts (List Report Controller)
     ```
 
 2. Display the non-minified version of the files
@@ -410,4 +411,13 @@ It would show all the installed packages in tree form.
 
     ```xml
     <Text text="{parts: [{path: 'FirstName'}, {path: 'LastName'}], formatter: '.formatName'}" />
+    ```
+
+6. Fiori Element Templates
+
+    These are metadata driven templates like List Report template, Analytical Page, Object Page. They are controlled using the Annotations embedded in the metadata.
+
+    ```url
+    Metadata Processing: sap.fe.core.AnnotationHelper
+    File: sap.fe.templates.ListReport.ListReportController
     ```
