@@ -390,16 +390,17 @@ This repo will be a guide to various linux commands which can be helpful to use 
     This is user authenticated request and we get the user details in the token as well as the `req` variable when calling the `/secure` endpoint.
 
     `req.user`
+
     ```json
     {
-        id: '<emailID>', 
-        name: {
-            givenName: 'Ashutosh', 
-            familyName: 'Joshi'}, 
-        emails: [
-            {
-                value: '<emailID>'
-            }]
+        "id": "<emailID>", 
+        "name": {
+            "givenName": "Ashutosh", 
+            "familyName": "Joshi"}, 
+            "emails": 
+                    [{
+                        "value": "<emailID>"
+                    }]
     }
     ```
 
