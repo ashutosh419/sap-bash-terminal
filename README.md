@@ -365,7 +365,7 @@ This repo will be a guide to various linux commands which can be helpful to use 
     > curl -s -L --request POST 'https://2ddfba9btrial.authentication.us10.hana.ondemand.com/oauth/token' \
     --header 'Content-Type: application/x-www-form-urlencoded' \
     --user '<ClientID>:<ClientSecret>' \
-    --data 'grant_type=client_credentials'
+    --data 'grant_type=password'
     --data '<emailID' 
     --data '<Password>'
 
