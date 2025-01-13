@@ -208,6 +208,202 @@ This repo will be a guide to various linux commands which can be helpful to use 
     VCAP_SERVICES: {"name1":"value1","name2":"value2","name3":"value3"}
     ```
 
+4. XSSEC and PASSPORT
+
+    Using these, we ensure that the requests coming to the application are authenticated with the bound `xsuaa` service. 
+
+    The below is the simplest example to demonstrate secure requests and unsecure requests.
+
+    ```js
+    const express = require("express");
+    const passport = require("passport");
+    const xssec = require("@sap/xssec");
+    const xsenv = require("@sap/xsenv");
+    const JWTStrategy = require("@sap/xssec").v3.JWTStrategy;
+    const app = express();
+    
+    xsenv.loadEnv();
+    const xsuaaCredentials = xsenv.serviceCredentials({ tag: "xsuaa" });
+
+    passport.use(new JWTStrategy(xsuaaCredentials));
+    app.use(passport.initialize());
+
+    app.get(
+    "/secure",
+    passport.authenticate("JWT", { session: false }),
+    (req, res) => {
+        res.json({
+        message: "Hello, Secure World!",
+        });
+    }
+    );
+
+    app.get("/", (req, res) => {
+    res.send("Hello, World!\n");
+    });
+
+    const port = 4005;
+    app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+    });
+
+    ```
+
+    The `default-env.json` file is as below containing the service key to `xsuaa` service.
+    
+    ```json
+    {
+    "VCAP_SERVICES": {
+        "xsuaa": [
+        {
+            "name": "xssec-demo-xsuaa",
+            "instance_name": "xssec-demo-xsuaa",
+            "label": "xsuaa",
+            "tags": [
+            "xsuaa",
+            "endpoint:https://api.cf.us10-001.hana.ondemand.com",
+            "org:2ddfba9btrial",
+            "space:dev"
+            ],
+            "plan": "application",
+            "credentials": {
+            "apiurl": "https://api.authentication.us10.hana.ondemand.com",
+            "clientid": "<MASKED_CLIENT_ID>",
+            "clientsecret": "<MASKED_CLIENT_SECRET",
+            "credential-type": "binding-secret",
+            "identityzone": "2ddfba9btrial",
+            "identityzoneid": "459d0dd0-3b2d-4a74-a0a8-e540eacd17d8",
+            "sburl": "https://internal-xsuaa.authentication.us10.hana.ondemand.com",
+            "serviceInstanceId": "cbb83a4b-a6da-46ec-a8c9-3f3f374df967",
+            "service_key_name": "key",
+            "subaccountid": "459d0dd0-3b2d-4a74-a0a8-e540eacd17d8",
+            "tenantid": "459d0dd0-3b2d-4a74-a0a8-e540eacd17d8",
+            "tenantmode": "shared",
+            "uaadomain": "authentication.us10.hana.ondemand.com",
+            "url": "https://2ddfba9btrial.authentication.us10.hana.ondemand.com",
+            "verificationkey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjCyFKyzVKR0ak1j1EmMm\nwIZekrAHtjQ6p22Gr+mO2BBRPCgOzlzpQ/7/xyg1B+kx6CoCfwT3EyKl/UZUfmTP\n3+SL4WGmTyyH7DJA4qw0lZcbdnu0uclZImjkNDILqdedqpUItS4Vt9MqX/tbfSCJ\nCcC2oNZrfmj9OcuAjYZtfa+lxxS4a1RqrbJrudkWBVuK92Euilw913eONn6cB1WE\nuc7+RyNS5cz4IxaYGZvExbYgY7yro4DX16ZRdgtEaZgeJD8bD1ngAHVlZoWWXtqK\nU/13EsK5XIyEMJ0Efu47qoOx6B2EYkoa/npkjE+RBRcTMh+GMc1nXjwvXYw3h8Gn\nCwIDAQAB\n-----END PUBLIC KEY-----",
+            "xsappname": "na-a39ee602-060a-4e63-b4f5-6ea4ebfad586!t355257",
+            "zoneid": "459d0dd0-3b2d-4a74-a0a8-e540eacd17d8"
+            }
+        }
+        ]
+    }
+    }
+
+    ```
+
+    Using `xsenv` the program loads this file into the `node.js` server. The program is able to run the unsecure request but responds with a `401: Unauthorised` response for the `/secure` endpoint.
+
+    ```bash
+    > node server.js
+
+    Server is running on port 4005
+    ```
+
+    Curl Requests
+
+    ```bash
+    > curl -si 'localhost:4005'
+
+    HTTP/1.1 200 OK
+    X-Powered-By: Express
+    Content-Type: text/html; charset=utf-8
+    Content-Length: 14
+    ETag: W/"e-YP3pwjELDUytTauNEmsEOH77ook"
+    Date: Mon, 13 Jan 2025 15:31:13 GMT
+    Connection: keep-alive
+    Keep-Alive: timeout=5
+
+    Hello, World!
+
+    > curl -si 'localhost:4005/secure'
+
+    HTTP/1.1 401 Unauthorized
+    X-Powered-By: Express
+    Date: Mon, 13 Jan 2025 15:31:41 GMT
+    Connection: keep-alive
+    Keep-Alive: timeout=5
+    Content-Length: 12
+
+    Unauthorized
+    ```
+
+    To connect to the `/secure` endpoint, we need to get the access-token from the XSUAA Service. We use two different ways here: `client_credentials` and `pasword` grant-types.
+
+    <b> 4.1 Client Credentials </b>
+    
+    We use `curl` to get the access-token and call the `/secure` endpoint.
+
+    ```bash
+    > curl -s -L --request POST 'https://2ddfba9btrial.authentication.us10.hana.ondemand.com/oauth/token' \
+    --header 'Content-Type: application/x-www-form-urlencoded' \
+    --user '<ClientID>:<ClientSecret>' \
+    --data 'grant_type=client_credentials'
+
+    {
+        "access_token": "ey...",
+        "token_type": "bearer",
+        "expires_in": 43199,
+        "scope": "uaa.resource",
+        "jti": "395a2af65c7e48e8819cad0f53ca2e74"
+    }
+
+    >  curl -s 'localhost:4005/secure' --header 'Authorization: Bearer ey...' | jq .
+
+    {
+        "message": "Hello, Secure World!"
+    }
+    ```
+
+    However, as this is not authenticated using the User Credentials, we don't get the user details in the token as well as the `req` variable when calling the `/secure` endpoint.
+
+    <b> 4.2 Password </b>
+    
+    We use `curl` to get the access-token and call the `/secure` endpoint.
+
+    ```bash
+    > curl -s -L --request POST 'https://2ddfba9btrial.authentication.us10.hana.ondemand.com/oauth/token' \
+    --header 'Content-Type: application/x-www-form-urlencoded' \
+    --user '<ClientID>:<ClientSecret>' \
+    --data 'grant_type=client_credentials'
+    --data '<emailID' 
+    --data '<Password>'
+
+    {
+        "access_token": "ey..",
+        "token_type": "bearer",
+        "id_token": "ey..",
+        "refresh_token": "6040f252810b4596b0d2ec56127f7db5-r",
+        "expires_in": 43199,
+        "scope": "openid",
+        "jti": "20438325045a479bae0d60acc06cc1a2"
+    }
+
+
+    >  curl -s 'localhost:4005/secure' --header 'Authorization: Bearer ey...' | jq .
+
+    {
+        "message": "Hello, Secure World!"
+    }
+    ```
+
+    This is user authenticated request and we get the user details in the token as well as the `req` variable when calling the `/secure` endpoint.
+
+    `req.user`
+    ```json
+    {
+        id: '<emailID>', 
+        name: {
+            givenName: 'Ashutosh', 
+            familyName: 'Joshi'}, 
+        emails: [
+            {
+                value: '<emailID>'
+            }]
+    }
+    ```
+
+
 ## Cloud Foundry
 
 ## CDS (Node.js)
