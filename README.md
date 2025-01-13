@@ -24,7 +24,7 @@ This repo will be a guide to various linux commands which can be helpful to use 
     ls -al ~/
     ```
 
-    It would show all the files: 
+    It would show all the files:
 
     ```bash
     total 208
@@ -47,7 +47,7 @@ This repo will be a guide to various linux commands which can be helpful to use 
 
     And add the line `alias r='ranger'` to the file to make this alias permanent.
 
-3. Using ranger for terminal based file explorer: 
+3. Using ranger for terminal based file explorer:
 
     Use the `ranger` command to start the terminal based file browser which provides a splitscreen preview and easily navigate the directories. It provides immediate preview of the file in the splitscreen pane. We can use `Shift + S` to open the terminal in the current directory and open the ranger back using `Ctrl + D`.
 
@@ -64,6 +64,7 @@ This repo will be a guide to various linux commands which can be helpful to use 
     ```bash
     btp list accounts/subscription | cut -c 1-$(tput cols)
     ```
+
     The below image shows text overflowing to the next lines:
 
     ![alt text](assets/image-2.png)
@@ -72,7 +73,7 @@ This repo will be a guide to various linux commands which can be helpful to use 
 
     ![alt text](assets/image-3.png)
 
-5. 
+5.
 
 ## Curl
 
@@ -100,6 +101,7 @@ This repo will be a guide to various linux commands which can be helpful to use 
     ```
 
     It gives out the formatted JSON correctly as follows:
+
     ```JSON
     {
         "API Endpoint": "https://api.cf.us10-001.hana.ondemand.com",
@@ -112,6 +114,7 @@ This repo will be a guide to various linux commands which can be helpful to use 
 2. Reading JSON with spaces in the key
 
     The key name has to be in double-quotes, and we use `--raw-output` or `-r` to remove any quotes in the output.
+
     ```jq
     > jq '.environmentInstances[0].labels | fromjson."API Endpoint"' env.json -r
 
@@ -163,7 +166,7 @@ This repo will be a guide to various linux commands which can be helpful to use 
  
     ```
 
-    We can format the same using Jq to display only the API Endpoint 
+    We can format the same using Jq to display only the API Endpoint
 
     ```bash
     > btp --format json list accounts/environment-instance | jq '.environmentInstances[0].labels | fromjson | ."API Endpoint"' --raw-output
@@ -171,7 +174,39 @@ This repo will be a guide to various linux commands which can be helpful to use 
     https://api.cf.us10-001.hana.ondemand.com 
     ```
 
-    Here we use Jq to navigate to the API Endpoint variable.  
+    Here we use Jq to navigate to the API Endpoint variable. 
+
+3. XSENV and VCAP_SERVICES
+
+    <b>XSENV</b> (SAP XS Environment) helps bridge the gap between local development and runtime environments by mimicking or accessing configurations like those in `VCAP_SERVICES`.
+
+    <b>VCAP_SERVICES</b> (Vendor Capability Services) provides a standardized way for applications to discover and use bound services in Cloud Foundry environments.
+
+    default-env.json
+
+    ```json, filename=default-env.json
+    {
+        "VCAP_SERVICES": {
+            "name1": "value1",
+            "name2": "value2",
+            "name3": "value3"
+        }
+    }
+    ```
+
+    And we run a `node.js` file as follows:
+
+    ```js
+    const xsenv = require('@sap/xsenv');
+    xsenv.loadEnv()
+    console.log("VCAP_SERVICES:", process.env.VCAP_SERVICES);
+    ```
+    It would access the file when running in local env and print the file.
+
+    ```bash
+    > node server.js
+    VCAP_SERVICES: {"name1":"value1","name2":"value2","name3":"value3"}
+    ```
 
 ## Cloud Foundry
 
@@ -273,7 +308,7 @@ It would show all the installed packages in tree form.
 
 1. Understanding the standard controls
 
-    To understand what's happening under the hood, it's useful to see the implementation of the standard controls like `sap.m.Text` for example. We can see them in console when the page is loaded, however it's a minified version (preload version). To see the complete implementation we use the openui5 git repo. 
+    To understand what's happening under the hood, it's useful to see the implementation of the standard controls like `sap.m.Text` for example. We can see them in console when the page is loaded, however it's a minified version (preload version). To see the complete implementation we use the openui5 git repo.
     Some of the files like `sap.ui.comp` is not available because its not open-source and can be checked only via the CDN and not GitRepo for Openui5.
 
     ```
@@ -407,7 +442,7 @@ It would show all the installed packages in tree form.
     https://sapui5.hana.ondemand.com/1.131.1/resources/sap/ui/base/ExpressionParser-dbg.js
     ```
 
-    This file shows how the parsing works for Binding expressions like below 
+    This file shows how the parsing works for Binding expressions like below
 
     ```xml
     <Text text="{parts: [{path: 'FirstName'}, {path: 'LastName'}], formatter: '.formatName'}" />
