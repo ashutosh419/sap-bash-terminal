@@ -420,5 +420,5 @@ It would show all the installed packages in tree form.
     ```url
     Metadata Processing: sap.fe.core.AnnotationHelper
     File: sap.fe.templates.ListReport.ListReportController
-    Template Processing: https://sapui5.hana.ondemand.com/1.131.1/resources/sap/fe/core/converters/TemplateConverter.ts
+    Template Processing: https://sapui5.hana.ondemand.com/1.131.1/resources/sap/fe/core/converters/TemplateConverter.ts 
     ```
