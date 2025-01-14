@@ -208,6 +208,13 @@ This repo will be a guide to various linux commands which can be helpful to use 
     VCAP_SERVICES: {"name1":"value1","name2":"value2","name3":"value3"}
     ```
 
+    We can use the methods availablein the object to filter the services available in `VCAP_SERVICES` environment variable.
+
+    ```js
+    // Get all the services available in the env variable
+    xsenv.readCFServices() 
+    ```
+
 4. XSSEC and PASSPORT
 
     Using these, we ensure that the requests coming to the application are authenticated with the bound `xsuaa` service. 
@@ -366,7 +373,7 @@ This repo will be a guide to various linux commands which can be helpful to use 
     --header 'Content-Type: application/x-www-form-urlencoded' \
     --user '<ClientID>:<ClientSecret>' \
     --data 'grant_type=password'
-    --data '<emailID' 
+    --data '<emailID>' 
     --data '<Password>'
 
     {
@@ -404,6 +411,71 @@ This repo will be a guide to various linux commands which can be helpful to use 
     }
     ```
 
+5. Using Axios to fetch Tokens and validate using XSSEC
+
+    Like we use `curl` for making calls from terminal, we can use `npm` package `axios` to fetch tokens using javascript.
+
+    ```js
+    const xsenv = require("@sap/xsenv");
+    const axios = require("axios");
+    const xssec = require("@sap/xssec");
+    const { constants } = require("./contants");
+
+    xsenv.loadEnv();
+    oCredentials = xsenv.readServices(constants.xsuaa)[constants.xsuaa].credentials;
+
+    // Fetching the Token of grant_type password
+    axios
+    .post(
+        oCredentials.url + "/oauth/token",
+        {
+        grant_type: "password",
+        username: constants.username,
+        password: constants.password,
+        },
+        {
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        auth: {
+            username: oCredentials.clientid,
+            password: oCredentials.clientsecret,
+        },
+        }
+    )
+    .then((response) => {
+        sAccessToken = response?.data?.access_token;
+
+        // Validating the token (Authenticating the User)
+        const authService = new xssec.XsuaaService(oCredentials);
+        const secContext = xssec
+        .createSecurityContext(authService, {
+            jwt: sAccessToken,
+        })
+        .then(
+            (value) => {
+            console.log(value.getUserInfo());
+            },
+            (reason) => {
+            console.log(reason.statusCode, reason.message);
+            }
+        );
+    });
+    ``` 
+
+    The same can be done in a simpler way without the hassle of making manual calls using the `xssec` libray.
+
+    ```js
+    const oServ = new xssec.XsuaaService(oCredentials);
+
+    // granttype = client_credentials
+    oServ.fetchClientCredentialsToken().then((value) => console.log(value.access_token));
+
+    // granttype = password
+    oServ
+    .fetchPasswordToken(constants.username, constants.password)
+    .then((value) => console.log(value.access.token));
+    ```
 
 ## Cloud Foundry
 
