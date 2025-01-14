@@ -463,7 +463,7 @@ This repo will be a guide to various linux commands which can be helpful to use 
     });
     ``` 
 
-    The same can be done in a simpler way without the hassle of making manual calls using the `xssec` libray.
+    The same can be done in a simpler way without the hassle of making manual calls, using the `xssec` libray.
 
     ```js
     const oServ = new xssec.XsuaaService(oCredentials);
