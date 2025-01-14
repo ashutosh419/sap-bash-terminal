@@ -419,7 +419,7 @@ This repo will be a guide to various linux commands which can be helpful to use 
     const xsenv = require("@sap/xsenv");
     const axios = require("axios");
     const xssec = require("@sap/xssec");
-    const { constants } = require("./contants");
+    const { constants } = require("./constants");
 
     xsenv.loadEnv();
     oCredentials = xsenv.readServices(constants.xsuaa)[constants.xsuaa].credentials;
@@ -446,7 +446,7 @@ This repo will be a guide to various linux commands which can be helpful to use 
     .then((response) => {
         sAccessToken = response?.data?.access_token;
 
-        // Validating the token (Authenticating the User)
+        // Manual Validation of the token (Authenticating the User)
         const authService = new xssec.XsuaaService(oCredentials);
         const secContext = xssec
         .createSecurityContext(authService, {
@@ -476,6 +476,8 @@ This repo will be a guide to various linux commands which can be helpful to use 
     .fetchPasswordToken(constants.username, constants.password)
     .then((value) => console.log(value.access.token));
     ```
+
+    We can use `DEBUG=xssec` to troubleshoot any `401 Unauthorized` responses.
 
 ## Cloud Foundry
 
