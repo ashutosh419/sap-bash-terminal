@@ -711,12 +711,30 @@ It would show all the installed packages in tree form.
 
     ```url
     https://sapui5.hana.ondemand.com/1.131.1/resources/sap/ui/base/ExpressionParser-dbg.js
+    https://sapui5.hana.ondemand.com/1.108.31/resources/sap/ui/base/BindingInfo-dbg.js
     ```
 
     This file shows how the parsing works for Binding expressions like below
 
     ```xml
     <Text text="{parts: [{path: 'FirstName'}, {path: 'LastName'}], formatter: '.formatName'}" />
+    ```
+
+    Moreover, the format of the binding can be found in `sap.ui.base.BindingInfo`. The default string provided is considered as path in the binding. If model separator is used like `modelName>/Property` then the model is extracted using the `>` separator and parsed in to the JSON Object.
+    `mode` is used to define the binding type whether it will be TwoWay or OneWay. In case of TwoWay the PATCH call is automatically made to the backend system on each change.
+
+    ```json
+    parts[0] = {
+        path: oBindingInfo.path,
+        targetType: oBindingInfo.targetType,
+        type: oBindingInfo.type,
+        suspended: oBindingInfo.suspended,
+        formatOptions: oBindingInfo.formatOptions,
+        constraints: oBindingInfo.constraints,
+        model: oBindingInfo.model,
+        mode: oBindingInfo.mode,
+        value: oBindingInfo.value
+    }
     ```
 
 6. Fiori Element Templates
